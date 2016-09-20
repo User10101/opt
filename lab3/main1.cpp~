@@ -1,0 +1,95 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+
+#define BOG -1
+
+using namespace std;
+
+inline bool is_bog(char x)
+{
+  if (x < 0) {
+    return true;
+  }
+
+  return false;
+}
+
+inline char max(char x1, char x2)
+{
+  if (is_bog(x1)) {
+    return x2;
+  }
+
+  if (is_bog(x2)) {
+    return x1;
+  }
+  return x1 > x2 ? x1 : x2;
+}
+
+inline char max(char x1, char x2, char x3)
+{
+  if (is_bog(x1)) {
+    return max(x2, x3);
+  } else if(is_bog(x2)) {
+    return max(x1, x3);
+  } else if (is_bog(x3)) {
+    return max(x1, x2);
+  }
+  
+  if (x1 >= x2) {
+    if (x1 >= x3) {
+      return x1;
+    } else {
+      return x3;
+    }
+  } else {
+    if (x2 >= x3) {
+      return x2;
+    } else {
+      return x3;
+    }
+  }
+}
+
+int main()
+{
+  ifstream ist;
+  ist.open("lepus.in");
+  unsigned short n;
+  ist >> n;
+  char c;
+  std::vector<char> weights(n);
+  for (size_t i = 0; i < n; ++i) {
+    ist >> c;
+    switch (c)
+      {
+      case 'w':
+	weights[i] = -1;
+	break;
+      case '.':
+	weights[i] = 0;
+	break;
+      case '"':
+	weights[i] = 1;
+	break;
+      }
+  }
+  ist.close();
+
+  char opt1, opt2, opt3;
+  vector<int> sums(n);
+  for (int i = 1; i < sums.size(); ++i) {
+    opt1 = (i - 1 >= 0) ? sums[i - 1] : BOG;
+    opt2 = (i - 3 >= 0) ? sums[i - 3] : BOG;
+    opt3 = (i - 5 >= 0) ? sums[i - 5] : BOG;
+    sums[i] = max(opt1, opt2, opt3) + weights[i];
+  }
+
+  ofstream ost;
+  ost.open("lepus.out");
+  ost << sums[n - 1];
+  ost.close();
+
+  return 0;
+}

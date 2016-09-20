@@ -1,0 +1,26 @@
+#include <iostream>
+
+std::pair<int, std::vector<int>> dyn_ledder(const std::vector<int> &costs)
+{
+  int curr_ind = 0;
+  int cost_sum = .0;
+  std::vector<int> path;
+  for (size_t i = 1; i < costs.size(); ++i) {
+    curr_ind = (costs[i] > costs[i-1]) ? i : (i - 1);
+    path.push_back(curr_ind);
+    cost_sum += costs[curr_ind];
+  }
+  return std::pair<int, std::vector<int>>(cost_sum, path);
+}
+
+int main()
+{
+  std::vector<int> ledder = {-1, -2, -2, -1, -1, 3, -1, -2, 2, -1, -3, -1, 2, -1, 1};
+  auto res = dyn_ledder(ledder);
+  std::cout << res.first << std::end;
+  for (size_t i = 0; i < res.second.size(); ++i) {
+    std::cout << res.second[i] << ' ';
+  }
+  std::cout << std::endl;
+  return 0;
+}

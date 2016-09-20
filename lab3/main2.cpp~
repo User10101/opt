@@ -1,0 +1,27 @@
+#include <iostream>
+#include <fstream>
+
+#define N 8
+
+using namespace std;
+
+int main()
+{
+  ifstream ist;
+  ist.open("king2.in");
+  short m[N][N];
+  for (size_t i = 0; i < N; ++i) {
+    for (size_t j = 0; j < N; ++j) {
+      ist >> m[i][j];
+    }
+  }
+  ist.close();
+
+  int p_i, p_j, p_k;
+  for (size_t i = 0; i < bound; ++i) {
+    
+  }
+
+  
+  return 0;
+}

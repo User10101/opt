@@ -1,0 +1,22 @@
+#include <iostream>
+
+double f(double x, double y)
+{
+  return x*x - x*y + y*y - 4*x + 3*y;
+}
+
+double dfx(double x, double y, double delta)
+{
+  return f(x + delta, y) / delta;
+}
+
+double dfy(double x, double y, double delta)
+{
+  return f(x, y + delta) / delta;
+}
+
+
+int main()
+{
+
+}
