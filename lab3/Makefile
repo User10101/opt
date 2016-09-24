@@ -1,2 +1,2 @@
 all:
-	g++ -g -std=c++11 knapsack.cpp -o knapsack
+	g++ -Wall -pedantic -O3 -std=c++11 knapsack.cpp -o knapsack
