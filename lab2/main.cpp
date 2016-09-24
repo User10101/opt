@@ -28,7 +28,8 @@ double dfy(arma::vec x, double delta)
   // x[1] = x[1] + delta;
   // double fdy = f(x);
   // return (fdy - fy) / delta;
-  return -2*pow(x[0]*x[0] - x[1], 2) + 2*(x[1] - 0.6);
+  //return -2*pow(x[0]*x[0] - x[1], 2) + 2*(x[1] - 0.6);
+  return -2*(x[0]*x[0] - x[1]) + 2*(x[1] - 0.6);
 }
 
 arma::vec grad(arma::vec x, double delta)
