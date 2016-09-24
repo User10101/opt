@@ -1,0 +1,28 @@
+#include <fstream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+  int S;
+  short N;
+  ifstream ist;
+  ist.open("knapsack.in");
+  ist >> S >> N;
+
+  vector<unsigned int> weights(N);
+  for (size_t i = 0; i < N; ++i) {
+    ist >> weights[i];
+  }
+  sort(weights.begin(), weights.end());
+
+  vector<unsigned int> costs(S);
+  for (size_t i = 0; i < S; ++i) {
+    
+  }
+
+
+  return 0;
+}

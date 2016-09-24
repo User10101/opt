@@ -89,8 +89,12 @@ void knapsack2(int target, int n_goods, short *weights, short *costs,
   }
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+  int knapsack_version = 1;
+  if (argc > 1) {
+    knapsack_version = atoi(argv[1]);
+  }
   int target;
   int n_goods;
   ifstream ist;
@@ -121,7 +125,12 @@ int main()
   ist.close();
   
   short *opt_costs = new short[target + 1];
-  knapsack2(target, n_goods, weights, costs, selected_goods, opt_costs);
+  if (1 == knapsack_version) {
+    knapsack1(target, n_goods, weights, costs, selected_goods, opt_costs);    
+  } else {
+    knapsack2(target, n_goods, weights, costs, selected_goods, opt_costs);
+  }
+
   
   ofstream ost;
   ost.open("knapsack.out");
