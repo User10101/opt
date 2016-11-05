@@ -3,6 +3,7 @@
 #include <list>
 #include <vector>
 #include <queue>
+#include <stack>
 #include <set>
 #include <algorithm>
 
@@ -55,10 +56,13 @@ public:
   int D() const;
   void D(int d);
 
+  int prev_v() const;
+  void prev_v(int v);
+
   const Edge last_edge;
 private:
   int d;
-  int no;
+  int pv;
 
   list<Edge> neighbors;
   list<Edge>::iterator curr_edge;
@@ -68,7 +72,7 @@ private:
 };
 
 Vertex::Vertex()
-  : is_clear(true), last_edge(-1, -1, -1)
+  : is_clear(true), last_edge(-1, -1, -1), pv(-1)
 {
   // DO NOTHING
 }
@@ -107,6 +111,16 @@ void Vertex::D(int _d)
   d = _d;
 }
 
+int Vertex::prev_v() const
+{
+  return pv;
+}
+
+void Vertex::prev_v(int v)
+{
+  pv = v;
+}
+
 class Vertex_comp
 {
 public:
@@ -137,7 +151,6 @@ void print_graph(Vertex *g, int N)
   }
 }
 
-// TODO не работает сравнение, не обновляются веса!!!
 void dijkstra(Vertex *g, int N, int s)
 {
   for (size_t i = 0; i < N; ++i) {
@@ -165,6 +178,7 @@ void dijkstra(Vertex *g, int N, int s)
     while (e != g[v].last_edge) {
       if (H.find(e.v) == end(H) && g[e.v].D() > g[v].D() + e.w) {
 	g[e.v].D(g[v].D() + e.w);
+	g[e.v].prev_v(v);
 	Q.emplace(e.v, g[e.v].D());
       }
       e = g[v].next_edge();
@@ -172,63 +186,38 @@ void dijkstra(Vertex *g, int N, int s)
   }
 }
 
-// int bfs(Vertex *g, int N, int s, int p)
-// {
-//   int level = 0;
-//   g[s].D(level);
-//   Vertex_comp comp(g);
-//   priority_queue<int, vector<int>, Vertex_comp> Q(comp);
-//   Q.push(s);
-//   set<int> H;
-//   while (Q.size()) {
-//     int v = Q.top();
-//     Q.pop();
-//     if (g[v].D() > level) {
-//       ++level;
-//     }
-//     if (H.find(v) == H.end()) {
-//       H.insert(v);
-//       Edge e = g[v].next_edge();
-//       while (e != g[v].last_edge) {
-// 	if (e.v == p) {
-// 	  return level + 1;
-// 	}
-// 	if (H.find(e.v) == end(H)) {
-// 	  g[e.v].D(level+1);
-// 	  Q.push(e.v);
-// 	}
-// 	e = g[v].next_edge();
-//       }
-//     }
-//   }
-
-//   return 0;
-// }
-
 int main()
 {
-  int N, S, F;
+  int n;
   ifstream ist;
-  ist.open("bfs.in");
-  ist >> N >> S >> F;
-  Vertex *G = new Vertex[N];
-  int is_edge;
-  for (size_t i = 0; i < N; ++i) {
-    for (size_t j = 0; j < N; ++j) {
-      ist >> is_edge;
-      if (is_edge) {
-	G[i].add_edge(i, j, 1);
-      }
-    }
+  ist.open("rootdist.in");
+  ist >> n;
+  Vertex *G = new Vertex[n];
+  int parent;
+  for (size_t i = 1; i < n; ++i) {
+    ist >> parent;
+    G[i].add_edge(i, parent-1, 1);
+    G[parent-1].add_edge(parent-1, i, 1);
   }
   ist.close();
+  dijkstra(G, n, 0);
+  list<int> mdv;
+  int max_d = 0;
+  for (size_t i = 0; i < n; ++i) {
+    if (G[i].D() > max_d) {
+      max_d = G[i].D();
+      mdv.clear();
+      mdv.push_back(i+1);
+    } else if (G[i].D() == max_d) {
+      mdv.push_back(i+1);
+    }
+  }
+
   ofstream ost;
-  ost.open("bfs.out");
-  dijkstra(G, N, S-1);
-  if (G[F-1].D() == MAX_D) {
-    ost << 0;
-  } else {
-    ost << G[F-1].D();
+  ost.open("rootdist.out");
+  ost << max_d << "\n" << mdv.size() << "\n";
+  for (auto iter : mdv) {
+    ost << iter << ' ';
   }
   ost.close();
 

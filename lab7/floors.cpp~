@@ -1,0 +1,39 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+  int n, m, k;
+  int a, b;
+  cin >> n >> m >> k;
+  cin >> a >> b;
+
+  int ed_entrance = a / (m * k);
+  int nat_entrance = b / (m * k);
+
+  int ed_floor = (a - ed_entrance * m * k) / k;
+  int nat_floor = (b - nat_entrance * m * k) / k;
+
+  if (ed_entrance == nat_entrance && ed_floor == nat_floor) {
+    cout << 0;
+  } else if (ed_entrance == nat_entrance) {
+    int dif = abs(ed_floor - nat_floor);
+    cout << min(dif*5, 10 + dif);
+  } else {
+    int et;
+    if (abs(ed_entrance - nat_entrance) <= n/2) {
+      et = abs(ed_entrance - nat_entrance) * 15;
+    } else {
+      if (ed_entrance < nat_entrance) {
+	et = (ed_entrance + n - nat_entrance) * 15;
+      } else {
+	et = (nat_entrance + n - ed_entrance) * 15;
+      }
+      int dif = abs(ed_floor - nat_floor);
+      cout << min(dif*5, 10 + dif) + et;
+    }
+  }
+
+  return 0;
+}
