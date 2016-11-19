@@ -1,0 +1,3 @@
+all: math
+math: math.cpp
+	g++ math.cpp -o math

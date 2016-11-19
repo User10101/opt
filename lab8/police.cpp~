@@ -1,0 +1,21 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+  size_t n, m;
+  cin >> n >> m;
+  vector<size_t> street_begin(m);
+  vector<size_t> street_end(m);
+  vector<size_t> squares(n);
+  for (size_t i = 0; i < m; ++i) {
+    cin >> street_begin[i] >> street_end[i];
+    squares[street_begin[i]]++;
+    squares[street_begin[j]]++;
+  }
+  size_t min = *min_elem(squares.begin(), squares.end());
+
+  return 0;
+}
