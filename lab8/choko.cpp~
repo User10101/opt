@@ -1,0 +1,19 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+  int N, k;
+  cin >> N >> k;
+
+  for (int i = 1; i <= N; i += 2) {
+    if (i * k == N) {
+      cout << "YES";
+      return 0;
+    }
+  }
+
+  cout << "NO";
+  return 0;
+}

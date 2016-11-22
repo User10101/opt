@@ -6,6 +6,8 @@
 #include <set>
 #include <algorithm>
 
+#define MAX_D 100000
+
 using namespace std;
 
 class Vertex;
@@ -108,18 +110,15 @@ void Vertex::D(int _d)
 class Vertex_comp
 {
 public:
-  Vertex_comp(const vector<Vertex> *v)
-    : vert(v)
+  Vertex_comp()
   {
     // DO NOTHING
   }
 
-  bool operator()(int v1, int v2)
+  bool operator()(pair<int, int> &lhs, pair<int, int> &rhs)
   {
-    return (*vert)[v1].D() >= (*vert)[v2].D();
+    return lhs.second >= rhs.second;
   }
-private:
-  const vector<Vertex> *vert;
 };
 
 ostream& operator << (ostream &ost, const Vertex &v)
@@ -131,79 +130,41 @@ ostream& operator << (ostream &ost, const Vertex &v)
   return ost;
 }
 
-void print_graph(const vector<Vertex> &g)
+void print_graph(Vertex *g, int N)
 {
-  for (int i = 0; i < g.size(); ++i) {
+  for (int i = 0; i < N; ++i) {
     cout << i << " --- " << g[i] << "\n";
   }
 }
 
-void dijkstra(vector<Vertex> &g, int s)
+void dijkstra(Vertex *g, int N, int s)
 {
-  int max_d = 100000;
-  for (size_t i = 0; i < g.size(); ++i) {
-    g[i].D(max_d);
+  for (size_t i = 0; i < N; ++i) {
+    g[i].D(MAX_D);
   }
   g[s].D(0);
 
-  Vertex_comp comp(&g);
   set<int> H;
-  priority_queue<int, vector<int>, Vertex_comp> Q(comp);
-  for (int i = 0; i < g.size(); ++i) {
-    Q.push(i);
+  priority_queue<pair<int, int>, vector<pair<int,int>>, Vertex_comp> Q;
+  for (int i = 0; i < N; ++i) {
+    Q.emplace(i, g[i].D());
   }
-  for (int i = 0; i < g.size(); ++i) {
-    int v = Q.top();
+  for (int i = 0; i < N; ++i) {
+    int v = (Q.top()).first;
     Q.pop();
     while (H.find(v) != end(H)) {
       if (Q.size() == 0) {
 	return;
       }
-      v = Q.top();
+      v = Q.top().first;
       Q.pop();
     }
     H.insert(v);
     Edge e = g[v].next_edge();
     while (e != g[v].last_edge) {
-      if (H.find(e.v) == end(H)) {
+      if (H.find(e.v) == end(H) && g[e.v].D() > g[v].D() + e.w) {
 	g[e.v].D(g[v].D() + e.w);
-	Q.push(e.v);
-      }
-      e = g[v].next_edge();
-    }
-  }
-}
-
-void dijkstra_basic(vector<Vertex> &g, int s)
-{
-  int max_d = 100000;
-  for (size_t i = 0; i < g.size(); ++i) {
-    g[i].D(max_d);
-  }
-  g[s].D(0);
-
-  Vertex_comp comp(&g);
-  set<int> H;
-  priority_queue<int, vector<int>, Vertex_comp> Q(comp);
-  for (int i = 0; i < g.size(); ++i) {
-    Q.push(i);
-  }
-  for (int i = 0; i < g.size(); ++i) {
-    int v = Q.top();
-    Q.pop();
-    while (H.find(v) != end(H)) {
-      if (Q.size() == 0) {
-	return;
-      }
-      v = Q.top();
-      Q.pop();
-    }
-    H.insert(v);
-    Edge e = g[v].next_edge();
-    while (e != g[v].last_edge) {
-      if (H.find(e.v) == end(H)) {
-	g[e.v].D(g[v].D() + e.w);
-	Q.push(e.v);
+	Q.emplace(e.v, g[e.v].D());
       }
       e = g[v].next_edge();
     }
@@ -217,23 +178,21 @@ int main()
   ist.open("dijkstra.in");
   ist >> s;
   ist >> N >> M;
-  vector<Vertex> G(N);
+  Vertex *G = new Vertex[N];
   int u, v, w;
-  for (size_t i = 0; i < G.size(); ++i) {
+  for (size_t i = 0; i < M; ++i) {
     ist >> u >> v >> w;
-    cout << u << ' ' << v << ' ' << w << endl;
     G[u].add_edge(u, v, w);
-    G[v].add_edge(v, u, w);
   }
   ist.close();
-  print_graph(G);
-  dijkstra(G, s);
+  dijkstra(G, N, s);
 
   ofstream ost("dijkstra.out");
-  for (size_t i = 0; i < G.size(); ++i) {
+  for (size_t i = 0; i < N; ++i) {
     ost << G[i].D() << "\n";
   }
   ost.close();
 
+  delete[] G;
   return 0;
 }

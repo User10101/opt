@@ -62,7 +62,7 @@ void knapsack2(int target, int n_goods, short *weights, short *costs,
   for (int i = 0; i < n_goods; ++i) {
     selected_goods[0][i] = 0;
   }
-  
+
   for (int i = 1; i <= target; ++i) {
     int max = 0;
     for (int j = 0; j < n_goods; ++j) {
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
     std::cerr << "Cannot open knapsack.in\n";
     return -1;
   }
-  
+
   ist >> n_goods;
   ist >> target;
   short *weights = new short[n_goods];
@@ -123,15 +123,14 @@ int main(int argc, char *argv[])
     ist >> costs[i];
   }
   ist.close();
-  
+
   short *opt_costs = new short[target + 1];
   if (1 == knapsack_version) {
-    knapsack1(target, n_goods, weights, costs, selected_goods, opt_costs);    
+    knapsack1(target, n_goods, weights, costs, selected_goods, opt_costs);
   } else {
     knapsack2(target, n_goods, weights, costs, selected_goods, opt_costs);
   }
 
-  
   ofstream ost;
   ost.open("knapsack.out");
   ost << opt_costs[target] << "\n";
@@ -146,6 +145,6 @@ int main(int argc, char *argv[])
   delete[] weights;
   delete[] costs;
   delete[] opt_costs;
-  
+
   return 0;
 }

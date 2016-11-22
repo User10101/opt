@@ -1,0 +1,13 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+int main()
+{
+  double a, b, c;
+  double iy = -c/b;
+  double ix = -c/a;
+  cout << (abs(ix) + abs(iy))/2;
+  return 0;
+}

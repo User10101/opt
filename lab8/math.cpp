@@ -4,13 +4,13 @@ using namespace std;
 
 int main()
 {
-  size_t p;
+  int p;
   cin >> p;
   bool flag = false;
-  for (size_t i = 0; i < p; ++i) {
+  for (int i = 0; i < p; ++i) {
     flag = false;
-    for (size_t j = 0; j < p; ++j) {
-      if ((j*j)%p == i) {
+    for (int j = 0; j < p; ++j) {
+      if ((j*j - i)%p == 0) {
 	cout << j << ' ';
 	flag = true;
 	break;
@@ -21,6 +21,6 @@ int main()
       cout << -1 << ' ';
     }
   }
-  
+
   return 0;
 }
