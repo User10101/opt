@@ -55,18 +55,29 @@ int main()
 {
   std::ifstream ist;
   ist.open("paral.in");
-  int n;
+  int N;
   int x1, x2;
-  
-  ist >> n >> m;
-  std::vector<Edge> e;
-  for (size_t i = 0; i < m; ++i) {
-    ist >> u >> v;
-    e.push_back(Edge(u, v, w));
+  ist >> N;
+
+  std::vector<std::pair<int, int> > cities(N);
+  for (size_t i = 0; i < N; ++i) {
+    ist >> x1 >> x2;
+    cities[i] = std::pair<int, int>(x1, x2);
   }
   ist.close();
 
-  std::vector<Edge> res = Kruskal(e, n);
+  std::vector<Edge> e;
+  for (int i = 0; i < cities.size(); ++i) {
+    for (int j = i + 1; j < cities.size(); ++j) {
+      if (cities[i].first == cities[j].first) {
+	e.push_back(Edge(i, j, abs(cities[i].second - cities[j].second)));
+      } else if (cities[i].second == cities[j].second) {
+	e.push_back(Edge(i, j, abs(cities[i].first - cities[j].first)));
+      }
+    }
+  }
+
+  std::vector<Edge> res = Kruskal(e, N);
 
   std::ofstream ost;
   ost.open("paral.out");
@@ -77,6 +88,7 @@ int main()
     for (size_t i = 0; i < res.size(); ++i) {
       sum += res[i].w;
     }
+    ost << sum;
   }
   ost.close();
   return 0;
