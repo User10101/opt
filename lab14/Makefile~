@@ -1,0 +1,3 @@
+all: knight
+knight: knight.cpp
+	g++ knight.cpp -o knight

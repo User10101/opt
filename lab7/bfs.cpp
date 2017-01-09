@@ -137,7 +137,6 @@ void print_graph(Vertex *g, int N)
   }
 }
 
-// TODO не работает сравнение, не обновляются веса!!!
 void dijkstra(Vertex *g, int N, int s)
 {
   for (size_t i = 0; i < N; ++i) {
@@ -172,38 +171,38 @@ void dijkstra(Vertex *g, int N, int s)
   }
 }
 
-// int bfs(Vertex *g, int N, int s, int p)
-// {
-//   int level = 0;
-//   g[s].D(level);
-//   Vertex_comp comp(g);
-//   priority_queue<int, vector<int>, Vertex_comp> Q(comp);
-//   Q.push(s);
-//   set<int> H;
-//   while (Q.size()) {
-//     int v = Q.top();
-//     Q.pop();
-//     if (g[v].D() > level) {
-//       ++level;
-//     }
-//     if (H.find(v) == H.end()) {
-//       H.insert(v);
-//       Edge e = g[v].next_edge();
-//       while (e != g[v].last_edge) {
-// 	if (e.v == p) {
-// 	  return level + 1;
-// 	}
-// 	if (H.find(e.v) == end(H)) {
-// 	  g[e.v].D(level+1);
-// 	  Q.push(e.v);
-// 	}
-// 	e = g[v].next_edge();
-//       }
-//     }
-//   }
+int bfs(Vertex *g, int N, int s, int p)
+{
+  int level = 0;
+  g[s].D(level);
+  Vertex_comp comp(g);
+  priority_queue<int, vector<int>, Vertex_comp> Q(comp);
+  Q.push(s);
+  set<int> H;
+  while (Q.size()) {
+    int v = Q.top();
+    Q.pop();
+    if (g[v].D() > level) {
+      ++level;
+    }
+    if (H.find(v) == H.end()) {
+      H.insert(v);
+      Edge e = g[v].next_edge();
+      while (e != g[v].last_edge) {
+	if (e.v == p) {
+	  return level + 1;
+	}
+	if (H.find(e.v) == end(H)) {
+	  g[e.v].D(level+1);
+	  Q.push(e.v);
+	}
+	e = g[v].next_edge();
+      }
+    }
+  }
 
-//   return 0;
-// }
+  return 0;
+}
 
 int main()
 {
